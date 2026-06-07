@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+<title>Home page</title>
+{% endblock %}
+
+{% block content %}
+<header>Welcome to Rock, Paper, Scissors, Lizard, Spock Online!</header>
+<p>In this online version of the game, you will play against a computer player.</p>
+<a href="{{url_for('display_rules')}}">Rules</a>
+{% endblock %}
