@@ -8,6 +8,8 @@ from flask import (
     url_for
     )
 
+import game_logic
+
 app = Flask(__name__)
 app.secret_key = '!i_love_rpsls_online!'
 
@@ -48,19 +50,30 @@ def computer_turn():
         # g.computers_move = 
         # g.winner = computer/player
     # redirect to display outcome page
-    session['player_move'] = request.form['move']
-    print(f'Players move captured: {session['player_move']}')
+    player_move = request.form['move']
+    computer_move = game_logic.get_computer_move()
+    winning_move = game_logic.determine_winning_move(player_move, computer_move)
+
+    session['player_move'] = player_move
+    session['computer_move'] = computer_move
+    session['winning_move'] = winning_move
+
     return redirect(url_for('display_outcome'))
 
 @app.route('/play/outcome')
 def display_outcome():
-    print(f'players move direct from session: {session.get('player_move')}')
-    player_move = session.pop('player_move')
-    print(f'Players move after redirect: {player_move}')
     # retrieve outcome and moves from g object?
     # render template with outcome, moves etc. All info needed to display what happened in the round
     # play again or quit
-    return render_template('outcome.html', player_move=player_move)
+    player_move = session.pop('player_move')
+    computer_move = session.pop('computer_move')
+    winning_move = session.pop('winning_move')
+
+    return render_template(
+        'outcome.html',
+        player_move=player_move,
+        computer_move=computer_move,
+        winning_move=winning_move)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5003)
