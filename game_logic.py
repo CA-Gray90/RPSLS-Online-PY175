@@ -13,7 +13,7 @@ def determine_winning_move(move1, move2):
         return move1
     elif move1 in MOVES_DICT[move2]:
         return move2
-    return 'tie'
+    return None
 
 def get_computer_move():
     moves = list(MOVES_DICT.keys())

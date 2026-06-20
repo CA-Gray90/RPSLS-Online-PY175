@@ -53,10 +53,18 @@ def computer_turn():
     player_move = request.form['move']
     computer_move = game_logic.get_computer_move()
     winning_move = game_logic.determine_winning_move(player_move, computer_move)
+    if winning_move:
+        if player_move == winning_move:
+            result = 'player'
+        else:
+            result = 'computer'
+    else:
+        result = 'tie'
 
     session['player_move'] = player_move
     session['computer_move'] = computer_move
     session['winning_move'] = winning_move
+    session['result'] = result
 
     return redirect(url_for('display_outcome'))
 
@@ -68,12 +76,14 @@ def display_outcome():
     player_move = session.pop('player_move')
     computer_move = session.pop('computer_move')
     winning_move = session.pop('winning_move')
+    result = session.pop('result')
 
     return render_template(
         'outcome.html',
         player_move=player_move,
         computer_move=computer_move,
-        winning_move=winning_move)
+        winning_move=winning_move,
+        result=result)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5003)
