@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+<title>Match Outcome</title>
+{% endblock %}
+
+{% block content %}
+<h1>Match outcome:</h1>
+<p>Players move: {{ player_move }}</p>
+<a>Play Again</a>
+<a href="{{ url_for('home') }}">Quit (Home)</a>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+<title>Players Turn</title>
+{% endblock %}
+
+{% block content %}
+<h1>Players Turn</h1>
+<p>Pick from one of the following options:</p>
+<form action="{{ url_for('computer_turn')}}" method="post">
+  <ul>
+    <li><button name="move" value="rock">Rock</button></li>
+    <li><button name="move" value="paper">Paper</button></li>
+    <li><button name="move" value="scissors">Scissors</button></li>
+    <li><button name="move" value="lizard">Lizard</button></li>
+    <li><button name="move" value="spock">Spock</button></li>
+  </ul>
+</form>
+{% endblock %}
