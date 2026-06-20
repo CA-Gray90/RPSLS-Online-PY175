@@ -7,6 +7,8 @@
 {% block content %}
 <h1>Match outcome:</h1>
 <p>Players move: {{ player_move }}</p>
-<a>Play Again</a>
-<a href="{{ url_for('home') }}">Quit (Home)</a>
+<ul>
+  <li><a href="{{ url_for('player_turn')}}">Next Round</a></li>
+  <li><a href="{{ url_for('home') }}">Quit (Home)</a></li>
+</ul>
 {% endblock %}
