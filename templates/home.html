@@ -5,7 +5,13 @@
 {% endblock %}
 
 {% block content %}
+<h1>Rock, Paper, Scissors, Lizard, Spock Online!</h1>
 <header>Welcome to Rock, Paper, Scissors, Lizard, Spock Online!</header>
 <p>In this online version of the game, you will play against a computer player.</p>
-<a href="{{url_for('display_rules')}}">Rules</a>
+<ul>
+  <li><a href="{{ url_for('display_rules') }}">Rules</a></li>
+  <li><a href="{{ url_for('sign_in') }}">Sign In</a></li>
+  <li><a href="{{ url_for('play_game') }}">Play!</a></li>
+  <li><a href="{{ url_for('display_leaderboard') }}">Leaderboard</a></li>
+</ul>
 {% endblock %}
