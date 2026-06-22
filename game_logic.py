@@ -19,4 +19,5 @@ def get_computer_move():
     moves = list(MOVES_DICT.keys())
     return random.choice(moves)
 
+# TODO:
 # Implement moves as a class? To contain winning method, who they beat, etc.
