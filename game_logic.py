@@ -96,11 +96,12 @@ def string_to_move_object(string_move):
         if move_obj.name == string_move:
             return move_obj
 
+def get_computer_move():
+    return random.choice(MOVES)
+
 def determine_winning_move(move1, move2):
-    print(f'move1 : {move1}, move2 : {move2}')
     move1 = string_to_move_object(move1)
     move2 = string_to_move_object(move2)
-    print(f'move1 : {move1}, move2 : {move2}')
     
     if move1 > move2:
         return move1.name
@@ -108,8 +109,19 @@ def determine_winning_move(move1, move2):
         return move2.name
     return None
 
-def get_computer_move():
-    return random.choice(MOVES)
+def get_winning_method(move1, move2):
+    winning_move = string_to_move_object(determine_winning_move(move1, move2))
+    if not winning_move:
+        return None
+
+    if winning_move.name != move1:
+        return winning_move.win_method(move1)
+    return winning_move.win_method(move2)
+    
+    # Determine who was the winner.
+    # Convert the string of the other move into a move object
+    # get the winning message by using moves.win_method method
+
 
 
 # TESTS

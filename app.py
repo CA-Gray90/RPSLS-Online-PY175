@@ -55,6 +55,7 @@ def computer_turn():
     session['player_move'] = player_move
     session['computer_move'] = computer_move
     session['winning_move'] = winning_move
+    session['winning_method'] = game_logic.get_winning_method(player_move, computer_move)
     session['result'] = result
 
     return redirect(url_for('display_outcome'))
@@ -67,6 +68,7 @@ def display_outcome():
     player_move = session.pop('player_move')
     computer_move = session.pop('computer_move')
     winning_move = session.pop('winning_move')
+    winning_method = session.pop('winning_method')
     result = session.pop('result')
 
     return render_template(
@@ -74,7 +76,8 @@ def display_outcome():
         player_move=player_move,
         computer_move=computer_move,
         winning_move=winning_move,
-        result=result)
+        result=result,
+        winning_method=winning_method)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5003)
