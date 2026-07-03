@@ -41,15 +41,6 @@ def player_turn():
 
 @app.route('/play/computer_turn', methods=['POST'])
 def computer_turn():
-    # Get the request object
-    # retrive the move the player made
-    # run the logic to determine computers move
-    # run the logic to determine winner of the round
-    # place moves and outcome into g object?
-        # g.players_move = 'rock'
-        # g.computers_move = 
-        # g.winner = computer/player
-    # redirect to display outcome page
     player_move = request.form['move']
     computer_move = game_logic.get_computer_move()
     winning_move = game_logic.determine_winning_move(player_move, computer_move)

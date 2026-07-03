@@ -1,12 +1,6 @@
 import random
 
-MOVES_DICT = {
-    'rock'      : ['scissors', 'lizard'],
-    'scissors'  : ['paper', 'lizard'],
-    'paper'     : ['rock', 'spock'],
-    'lizard'    : ['paper', 'spock'],
-    'spock'     : ['rock', 'scissors']
-}
+MOVES = ['scissors', 'paper', 'rock', 'lizard', 'spock']
 
 class Move():
     def __init__(self):
@@ -92,16 +86,31 @@ class Spock(Move):
             'Spock dismantles scissors!'
         )
 
+def string_to_move_object(string_move):
+    if string_move not in MOVES:
+        return None
+    
+    string_move = string_move.lower()
+    for move in [Rock, Paper, Scissors, Lizard, Spock]:
+        move_obj = move()
+        if move_obj.name == string_move:
+            return move_obj
+
 def determine_winning_move(move1, move2):
-    if move2 in MOVES_DICT[move1]:
-        return move1
-    elif move1 in MOVES_DICT[move2]:
-        return move2
+    print(f'move1 : {move1}, move2 : {move2}')
+    move1 = string_to_move_object(move1)
+    move2 = string_to_move_object(move2)
+    print(f'move1 : {move1}, move2 : {move2}')
+    
+    if move1 > move2:
+        return move1.name
+    elif move2 > move1:
+        return move2.name
     return None
 
 def get_computer_move():
-    moves = list(MOVES_DICT.keys())
-    return random.choice(moves)
+    return random.choice(MOVES)
+
 
 # TESTS
 # rock = Rock()
