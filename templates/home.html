@@ -10,7 +10,12 @@
 <p>In this online version of the game, you will play against a computer player.</p>
 <ul>
   <li><a href="{{ url_for('display_rules') }}">Rules</a></li>
+  {% if session.get('player_name') %}
+    <li><a href="{{ url_for('enter_playername') }}">Continue playing</a></li>
+    <li><a href="{{ url_for('new_player') }}">New player</a></li>
+  {% else %}
   <li><a href="{{ url_for('enter_playername') }}">Play!</a></li>
+  {% endif %}
   <li><a href="{{ url_for('display_leaderboard') }}">Leaderboard</a></li>
 </ul>
 {% endblock %}

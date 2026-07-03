@@ -45,6 +45,11 @@ def validate_playername():
     
     return render_template('play_game.html', player_name=player_name)
 
+@app.route('/new_player')
+def new_player():
+    session.pop('player_name')
+    return redirect(url_for('enter_playername'))
+
 @app.route('/play')
 def play_game():
     return render_template('play_game.html')
