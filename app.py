@@ -29,9 +29,9 @@ def display_leaderboard():
 
 @app.route('/enter_playername')
 def enter_playername():
-    player_name = session.get('player_name', None)
-    if player_name:
-        return render_template('play_game.html', player_name=player_name)
+    # player_name = session.get('player_name', None)
+    # if player_name:
+    #     return render_template('play_game.html', player_name=player_name)
     return render_template('pick_playername.html')
 
 @app.route('/enter_playername/validate', methods=['POST'])
