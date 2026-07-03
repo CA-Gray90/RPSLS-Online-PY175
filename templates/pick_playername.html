@@ -4,7 +4,17 @@
 <title>Pick a username</title>
 {% endblock %}
 
+
 {% block content %}
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+{% endwith %}
 <h2>Pick your player name!</h2>
 <form action="{{ url_for('validate_playername') }} " method="POST">
   <label for="player_name">Enter Player name (Max 8 Characters):</label>

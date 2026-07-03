@@ -1,5 +1,6 @@
 from flask import (
     Flask,
+    flash,
     g,
     render_template,
     redirect,
@@ -8,10 +9,12 @@ from flask import (
     url_for
     )
 
-import game_logic
+import game_logic, utils
 
 app = Flask(__name__)
 app.secret_key = '!i_love_rpsls_online!'
+
+PLAYER_NAME_LENGTH = 8
 
 @app.route('/')
 def home():
@@ -29,21 +32,21 @@ def display_leaderboard():
 
 @app.route('/enter_playername')
 def enter_playername():
-    # player_name = session.get('player_name', None)
-    # if player_name:
-    #     return render_template('play_game.html', player_name=player_name)
     return render_template('pick_playername.html')
 
 @app.route('/enter_playername/validate', methods=['POST'])
 def validate_playername():
-    # Retrieve valid name
-    player_name = request.form['player_name']
+    player_name = request.form['player_name'].strip()
     # Implement logic to validate username:
         # not longer than 8 chars long
         # not in the leaderboard, saved names
-    session['player_name'] = player_name
+    if utils.valid_player_name(player_name, PLAYER_NAME_LENGTH):
+        session['player_name'] = player_name
     
-    return render_template('play_game.html', player_name=player_name)
+        return render_template('play_game.html', player_name=player_name)
+    
+    flash('Not a valid username. Try again.')
+    return redirect(url_for('enter_playername'))
 
 @app.route('/new_player')
 def new_player():
