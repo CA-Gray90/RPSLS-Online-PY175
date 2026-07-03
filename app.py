@@ -21,10 +21,6 @@ def home():
 def display_rules():
     return render_template('rules.html')
 
-@app.route('/sign_in')
-def sign_in():
-    return render_template('sign_in.html')
-
 @app.route('/leaderboard')
 def display_leaderboard():
     # Retrieve leadboard file
