@@ -9,12 +9,17 @@ from flask import (
     url_for
     )
 
-import game_logic, utils
+import game_logic, os, utils, yaml
 
 app = Flask(__name__)
 app.secret_key = '!i_love_rpsls_online!'
 
 PLAYER_NAME_LENGTH = 8
+
+@app.before_request
+def get_data_path():
+    root = os.path.abspath(os.path.dirname(__file__))
+    g.data_dir = os.path.join(root, 'rpsls_online', 'data')
 
 @app.route('/')
 def home():
@@ -40,13 +45,21 @@ def validate_playername():
     # Implement logic to validate username:
         # not longer than 8 chars long
         # not in the leaderboard, saved names
-    if utils.valid_player_name(player_name, PLAYER_NAME_LENGTH):
-        session['player_name'] = player_name
+            # retrieve and open the file
+            # check against the names in the file
+    if not utils.valid_player_name(player_name, PLAYER_NAME_LENGTH):
+        flash('Not a valid username. Try again.')
+        return render_template('pick_playername.html', current_name=player_name)
+        
+    with open(g.data_dir + '/leaderboard.yaml', 'r') as file:
+        leaderboard = yaml.safe_load(file)
+    if player_name in leaderboard.keys():
+        flash('Please choose another username, current one in leaderboard.')
+        return render_template('pick_playername.html', current_name=player_name)
+
+    session['player_name'] = player_name
+    return render_template('play_game.html', player_name=player_name)
     
-        return render_template('play_game.html', player_name=player_name)
-    
-    flash('Not a valid username. Try again.')
-    return redirect(url_for('enter_playername'))
 
 @app.route('/new_player')
 def new_player():
