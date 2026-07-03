@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block content %}
-<h1>Play Game!</h1>
+<h2>Welcome {{ player_name }}!</h2>
+<p>Ready to play?</p>
 <a href="{{ url_for('player_turn') }}">Start</a>
 {% endblock %}

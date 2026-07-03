@@ -27,6 +27,24 @@ def display_leaderboard():
     # display leaderboard > pass it to template
     return render_template('leaderboard.html')
 
+@app.route('/enter_playername')
+def enter_playername():
+    player_name = session.get('player_name', None)
+    if player_name:
+        return render_template('play_game.html', player_name=player_name)
+    return render_template('pick_playername.html')
+
+@app.route('/enter_playername/validate', methods=['POST'])
+def validate_playername():
+    # Retrieve valid name
+    player_name = request.form['player_name']
+    # Implement logic to validate username:
+        # not longer than 8 chars long
+        # not in the leaderboard, saved names
+    session['player_name'] = player_name
+    
+    return render_template('play_game.html', player_name=player_name)
+
 @app.route('/play')
 def play_game():
     return render_template('play_game.html')
