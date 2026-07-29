@@ -89,6 +89,7 @@ def computer_turn():
             result = 'computer'
     else:
         result = 'tie'
+        session['round'] -= 1
 
     session['player_move'] = player_move
     session['computer_move'] = computer_move
