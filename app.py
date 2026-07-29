@@ -80,31 +80,35 @@ def computer_turn():
     player_move = request.form['move']
     computer_move = game_logic.get_computer_move()
     winning_move = game_logic.determine_winning_move(player_move, computer_move)
+
     if winning_move:
         if player_move == winning_move:
             result = 'player'
+            session['score'] += 1
         else:
             result = 'computer'
     else:
         result = 'tie'
+        session['round'] -= 1
 
     session['player_move'] = player_move
     session['computer_move'] = computer_move
     session['winning_move'] = winning_move
     session['winning_method'] = game_logic.get_winning_method(player_move, computer_move)
     session['result'] = result
+
     return redirect(url_for('display_outcome'))
 
 @app.route('/play/outcome')
 def display_outcome():
-    # determine if enough rounds have been played to do something else
     final_round = session['round'] >= 5
     player_move = session.pop('player_move')
     computer_move = session.pop('computer_move')
     winning_move = session.pop('winning_move')
     winning_method = session.pop('winning_method')
-    result = session.pop('result')
 
+    result = session.pop('result')
+    
     return render_template(
         'outcome.html',
         player_move=player_move,
@@ -112,7 +116,9 @@ def display_outcome():
         winning_move=winning_move,
         result=result,
         winning_method=winning_method,
-        final_round=final_round)
+        final_round=final_round,
+        score=session['score'],
+        max_rounds=MAX_ROUNDS_PER_GAME)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5003)
