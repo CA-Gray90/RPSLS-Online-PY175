@@ -15,6 +15,7 @@ app = Flask(__name__)
 app.secret_key = '!i_love_rpsls_online!'
 
 PLAYER_NAME_LENGTH = 8
+MAX_ROUNDS_PER_GAME = 5
 
 @app.before_request
 def get_data_path():
@@ -53,7 +54,7 @@ def validate_playername():
         return render_template('pick_playername.html', current_name=player_name)
 
     session['player_name'] = player_name
-    return render_template('play_game.html', player_name=player_name)
+    return redirect(url_for('play_game'))
     
 
 @app.route('/new_player')
@@ -63,11 +64,16 @@ def new_player():
 
 @app.route('/play')
 def play_game():
-    return render_template('play_game.html')
+    session['round'] = 0
+    session['score'] = 0
+    return render_template('play_game.html', player_name=session['player_name'])
 
 @app.route('/play/player_turn')
 def player_turn():
-    return render_template('player_turn.html')
+    session['round'] += 1
+    return render_template('player_turn.html',
+                           round_number=session['round'],
+                           max_rounds=MAX_ROUNDS_PER_GAME)
 
 @app.route('/play/computer_turn', methods=['POST'])
 def computer_turn():
@@ -87,7 +93,6 @@ def computer_turn():
     session['winning_move'] = winning_move
     session['winning_method'] = game_logic.get_winning_method(player_move, computer_move)
     session['result'] = result
-
     return redirect(url_for('display_outcome'))
 
 @app.route('/play/outcome')
@@ -95,6 +100,8 @@ def display_outcome():
     # retrieve outcome and moves from g object?
     # render template with outcome, moves etc. All info needed to display what happened in the round
     # play again or quit
+    # determine if enough rounds have been played to do something else
+
     player_move = session.pop('player_move')
     computer_move = session.pop('computer_move')
     winning_move = session.pop('winning_move')

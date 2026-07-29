@@ -6,6 +6,7 @@
 
 {% block content %}
 <h1>Players Turn</h1>
+<h2>Round {{ round_number }} of {{ max_rounds }}</h2>
 <p>Pick from one of the following options:</p>
 <form action="{{ url_for('computer_turn')}}" method="post">
   <ul>
