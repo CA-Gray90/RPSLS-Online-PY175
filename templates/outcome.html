@@ -12,8 +12,14 @@
 <p>Winning method: {{ winning_method }}</p>
 <p>Outcome: {{ result }}</p>
 
-<ul>
-  <li><a href="{{ url_for('player_turn')}}">Next Round</a></li>
-  <li><a href="{{ url_for('home') }}">Quit Game (Home)</a></li>
-</ul>
+{% if final_round %}
+  <p>That was your last round</p>
+  <ul>
+    <li><a href="{{ url_for('home') }}">Home</a></li>
+    <li><a href="{{ url_for('display_leaderboard' )}}">Leaderboard</a></li>
+  </ul>
+{% else %}
+  <a href="{{ url_for('player_turn')}}">Next Round</a></li>
+{% endif %}
+
 {% endblock %}

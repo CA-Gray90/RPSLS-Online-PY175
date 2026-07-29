@@ -97,11 +97,8 @@ def computer_turn():
 
 @app.route('/play/outcome')
 def display_outcome():
-    # retrieve outcome and moves from g object?
-    # render template with outcome, moves etc. All info needed to display what happened in the round
-    # play again or quit
     # determine if enough rounds have been played to do something else
-
+    final_round = session['round'] >= 5
     player_move = session.pop('player_move')
     computer_move = session.pop('computer_move')
     winning_move = session.pop('winning_move')
@@ -114,7 +111,8 @@ def display_outcome():
         computer_move=computer_move,
         winning_move=winning_move,
         result=result,
-        winning_method=winning_method)
+        winning_method=winning_method,
+        final_round=final_round)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5003)
