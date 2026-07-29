@@ -33,7 +33,10 @@ def display_rules():
 def display_leaderboard():
     # Retrieve leadboard file
     # display leaderboard > pass it to template
-    return render_template('leaderboard.html')
+    with open(g.data_dir + '/leaderboard.yaml', 'r') as file:
+        leaderboard = [(name, score) for name, score in yaml.safe_load(file).items()]
+    # print(leaderboard)
+    return render_template('leaderboard.html', leaderboard=leaderboard)
 
 @app.route('/enter_playername')
 def enter_playername():
