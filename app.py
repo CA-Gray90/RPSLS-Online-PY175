@@ -31,11 +31,8 @@ def display_rules():
 
 @app.route('/leaderboard')
 def display_leaderboard():
-    # Retrieve leadboard file
-    # display leaderboard > pass it to template
     with open(g.data_dir + '/leaderboard.yaml', 'r') as file:
         leaderboard = [(name, score) for name, score in yaml.safe_load(file).items()]
-    # print(leaderboard)
     return render_template('leaderboard.html', leaderboard=leaderboard)
 
 @app.route('/enter_playername')
@@ -45,11 +42,6 @@ def enter_playername():
 @app.route('/enter_playername/validate', methods=['POST'])
 def validate_playername():
     player_name = request.form['player_name'].strip()
-    # Implement logic to validate username:
-        # not longer than 8 chars long
-        # not in the leaderboard, saved names
-            # retrieve and open the file
-            # check against the names in the file
     if not utils.valid_player_name(player_name, PLAYER_NAME_LENGTH):
         flash('Not a valid username. Try again.')
         return render_template('pick_playername.html', current_name=player_name)
