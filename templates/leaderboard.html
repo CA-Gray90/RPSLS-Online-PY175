@@ -6,6 +6,17 @@
 
 {% block content %}
 <h1>Leaderboard</h1>
-<p>Display Leaderboard info here (as table?)</p>
+
+<table>
+  <tr>
+    <th>Player Name</th>
+    <th>Score</th>
+  </tr>
+  <tr>
+    <td>Some data</td>
+    <td>more data</td>
+  </tr>
+</table>
+<br>
 <a href="{{ url_for('home') }}">Home</a>
 {% endblock %}
