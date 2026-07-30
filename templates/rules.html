@@ -4,8 +4,20 @@
 {% endblock %}
 
 {% block content %}
-<h2>Rules</h2>
-<header>Here are the rules for the game:</header>
-<p>(Rules here)</p>
-<a href="{{url_for('home')}}">Home</a>
+<h2>Rules of the Game</h2>
+{% for line in opening_lines %}
+  <p>{{ line }}</p>
+{% endfor %}
+<h3>So, who beats who?</h3>
+<ul>
+  {% for line in game_actions %}
+    <li>{{ line }}</li>
+  {% endfor %}
+</ul>
+
+<p><strong>Ready to give the game a go?</strong></p>
+<ul>
+  <li><a href="{{ url_for('play_game') }}">Play!</a></li>
+  <li><a href="{{ url_for('home') }}">Home</a></li>
+</ul>
 {% endblock %}

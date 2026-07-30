@@ -28,7 +28,14 @@ def home():
 
 @app.route('/rules')
 def display_rules():
-    return render_template('rules.html')
+    with open(g.data_dir + '/rules.yaml', 'r') as file:
+        rules = yaml.safe_load(file)
+
+    opening_lines = rules['opening_lines']
+    game_actions = rules['game_actions']
+    return render_template('rules.html',
+                           opening_lines=opening_lines,
+                           game_actions=game_actions)
 
 @app.route('/leaderboard')
 def display_leaderboard():

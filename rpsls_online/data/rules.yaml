@@ -1,8 +1,10 @@
-rules: 
-  - opening_line: "RPSLS or Rock, Paper, Scissors, Lizard, Spock is an expanded version of the regular Rock, Paper, Scissors game. The players have two extra choices; Lizard and Spock expanding the number of choices and lessening the chance of draws. Each move now beats two other moves."
-  - beats:
-    - "Rock smashes Scissors and crushes Lizard."
-    - "Paper covers Rock and disproves Spock."
-    - "Scissors cuts Paper and decapitates Lizard."
-    - "Lizard poisons Spock and eats Paper."
-    - "Spock vapourizes Rock and dismantles Scissors."
+opening_lines:
+  - "RPSLS or Rock, Paper, Scissors, Lizard, Spock is an expanded version of the regular Rock, Paper, Scissors game." 
+  - "The players have two extra choices; Lizard and Spock, increasing the number of choices and lessening the chance of draws."
+  - "Each move now beats two other moves."
+game_actions:
+  - "Rock smashes Scissors and crushes Lizard."
+  - "Paper covers Rock and disproves Spock."
+  - "Scissors cuts Paper and decapitates Lizard."
+  - "Lizard poisons Spock and eats Paper."
+  - "Spock vapourizes Rock and dismantles Scissors."
