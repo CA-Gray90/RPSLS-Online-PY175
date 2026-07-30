@@ -34,6 +34,7 @@ def display_rules():
 def display_leaderboard():
     with open(g.data_dir + '/leaderboard.yaml', 'r') as file:
         leaderboard = [(name, score) for name, score in yaml.safe_load(file).items()]
+        leaderboard.sort(key=lambda tup: tup[1], reverse=True)
     return render_template('leaderboard.html', leaderboard=leaderboard)
 
 @app.route('/enter_playername')
@@ -108,7 +109,23 @@ def display_outcome():
     winning_method = session.pop('winning_method')
 
     result = session.pop('result')
-    
+
+    if final_round:
+        with open(g.data_dir + '/leaderboard.yaml', 'r') as file:
+                leaderboard = [(name, score) for name, score in yaml.safe_load(file).items()]
+                leaderboard.sort(key=lambda tup: tup[1], reverse=True)
+
+        if utils.include_score_in_leaderboard(session['score'], leaderboard):
+            leaderboard = utils.update_leaderboard(session['player_name'], session['score'], leaderboard)
+        # We update the leaderboard
+        # We need to write it to the yaml file
+        # Check if the user made it on to the leaderboard?
+            # maybe another util function to check?
+        # Then update leaderboard
+        # save file
+        with open(g.data_dir + '/leaderboard.yaml', 'w') as file:
+            yaml.safe_dump(dict(leaderboard), file)
+
     return render_template(
         'outcome.html',
         player_move=player_move,
@@ -122,3 +139,13 @@ def display_outcome():
 
 if __name__ == '__main__':
     app.run(debug=True, port=5003)
+
+# TODO: Continue to update leaderboard functionality:
+    # Util function that returns bool if player made it onto leaderboard
+    # Then update the leaderboard list
+    # update the yaml file
+
+# TODO: Update the outcome page for clearer outcomes, delcaration of winner etc
+# TODO: Update Rules page
+# TODO: Separate functionality, DRY the code?
+# TODO: Clean up UI a bit with basic CSS
