@@ -143,6 +143,5 @@ if __name__ == '__main__':
     app.run(debug=True, port=5003)
 
 # TODO: Update the outcome page for clearer outcomes, delcaration of winner etc
-# TODO: Update Rules page
 # TODO: Separate functionality, DRY the code?
 # TODO: Clean up UI a bit with basic CSS
