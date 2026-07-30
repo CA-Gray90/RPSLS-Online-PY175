@@ -117,14 +117,9 @@ def display_outcome():
 
         if utils.include_score_in_leaderboard(session['score'], leaderboard):
             leaderboard = utils.update_leaderboard(session['player_name'], session['score'], leaderboard)
-        # We update the leaderboard
-        # We need to write it to the yaml file
-        # Check if the user made it on to the leaderboard?
-            # maybe another util function to check?
-        # Then update leaderboard
-        # save file
-        with open(g.data_dir + '/leaderboard.yaml', 'w') as file:
-            yaml.safe_dump(dict(leaderboard), file)
+
+            with open(g.data_dir + '/leaderboard.yaml', 'w') as file:
+                yaml.safe_dump(dict(leaderboard), file)
 
     return render_template(
         'outcome.html',
