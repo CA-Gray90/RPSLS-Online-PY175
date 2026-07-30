@@ -5,15 +5,40 @@
 {% endblock %}
 
 {% block content %}
-<h1>Match outcome:</h1>
-<p>Players move: {{ player_move }}</p>
-<p>Computers move: {{ computer_move }}</p>
-<p>Winning move: {{ winning_move }}</p>
-<p>Winning method: {{ winning_method }}</p>
-<p>Player Score: {{ score }}/{{ max_rounds }}</p>
+{% if result == 'player' %}
+  <h1>Match outcome: Win</h1>
+{% elif result == 'computer' %}
+  <h1>Match outcome: Loss</h1>
+{% else %}
+  <h1>Match outcome: Draw</h1>
+{% endif %}
 
+<p>You chose {{ player_move | capitalize }} and Computer chose {{ computer_move | capitalize }}.</p>
+<p>
+  {% if result != 'tie' %}
+    <strong>{{ winning_method }}</strong>
+  {% endif %}
+</p>
+<br>
 {% if final_round %}
-  <p>That was your last round</p>
+  <h2>Game Over!</h2>
+  <p>That was the final round.</p>
+  {% if score > max_rounds/2 %}
+    <p>Overall you won the majority of games, congratulations!</p>
+    {% if included %}
+      <p>You made it onto the leaderboard!</p>
+    {% else %}
+      <p>Unfortunately, you did not make it onto the leaderboard.</p>
+    {% endif %}
+  {% else %}
+    <p>You lost the majority of games, better luck next time.</p>
+    {% if included %}
+      <p>Looks like you still made it onto the leaderboard!</p>
+    {% endif %}
+  {% endif %}
+{% endif %}
+<h4>Your Score: {{ score }}/{{ max_rounds }}</h4>
+{% if final_round %}
   <ul>
     <li><a href="{{ url_for('home') }}">Home</a></li>
     <li><a href="{{ url_for('display_leaderboard' )}}">Leaderboard</a></li>
