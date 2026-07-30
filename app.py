@@ -114,8 +114,8 @@ def display_outcome():
     computer_move = session.pop('computer_move')
     winning_move = session.pop('winning_move')
     winning_method = session.pop('winning_method')
-
     result = session.pop('result')
+    included_on_leaderboard = False
 
     if final_round:
         with open(g.data_dir + '/leaderboard.yaml', 'r') as file:
@@ -127,6 +127,7 @@ def display_outcome():
 
             with open(g.data_dir + '/leaderboard.yaml', 'w') as file:
                 yaml.safe_dump(dict(leaderboard), file)
+            included_on_leaderboard = True
 
     return render_template(
         'outcome.html',
@@ -137,7 +138,8 @@ def display_outcome():
         winning_method=winning_method,
         final_round=final_round,
         score=session['score'],
-        max_rounds=MAX_ROUNDS_PER_GAME)
+        max_rounds=MAX_ROUNDS_PER_GAME,
+        included=included_on_leaderboard)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5003)
