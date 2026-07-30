@@ -56,7 +56,6 @@ def validate_playername():
 
     session['player_name'] = player_name
     return redirect(url_for('play_game'))
-    
 
 @app.route('/new_player')
 def new_player():
@@ -95,7 +94,8 @@ def computer_turn():
     session['player_move'] = player_move
     session['computer_move'] = computer_move
     session['winning_move'] = winning_move
-    session['winning_method'] = game_logic.get_winning_method(player_move, computer_move)
+    session['winning_method'] = game_logic.get_winning_method(player_move, 
+                                                              computer_move)
     session['result'] = result
 
     return redirect(url_for('display_outcome'))
@@ -134,11 +134,6 @@ def display_outcome():
 
 if __name__ == '__main__':
     app.run(debug=True, port=5003)
-
-# TODO: Continue to update leaderboard functionality:
-    # Util function that returns bool if player made it onto leaderboard
-    # Then update the leaderboard list
-    # update the yaml file
 
 # TODO: Update the outcome page for clearer outcomes, delcaration of winner etc
 # TODO: Update Rules page
