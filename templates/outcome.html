@@ -6,14 +6,26 @@
 
 {% block content %}
 <h1>Match outcome:</h1>
-<p>Players move: {{ player_move }}</p>
-<p>Computers move: {{ computer_move }}</p>
-<p>Winning move: {{ winning_move }}</p>
-<p>Winning method: {{ winning_method }}</p>
-<p>Player Score: {{ score }}/{{ max_rounds }}</p>
+<p>You chose {{ player_move | capitalize }} and Computer chose {{ computer_move | capitalize }}.</p>
+<p>
+  <strong>{{ winning_method }}</strong>
+</p>
+{% if result == 'player' %}
+<h3>You won the round!</h3>
+{% elif result == 'computer' %}
+<h3>You lost to the Computer!</h3>
+{% else %}
+<h3>It's a Draw!</h3>
+{% endif %}
+<br>
+<h4>Your Score: {{ score }}/{{ max_rounds }}</h4>
 
 {% if final_round %}
-  <p>That was your last round</p>
+  <h2>Game Over!</h2>
+  <p>That was the final round.</p>
+{% endif %}
+
+{% if final_round %}
   <ul>
     <li><a href="{{ url_for('home') }}">Home</a></li>
     <li><a href="{{ url_for('display_leaderboard' )}}">Leaderboard</a></li>
