@@ -6,3 +6,16 @@
     color:rgb(0, 184, 28);
     background: #d4ffcc
 }
+
+td, th {
+    border: 1px solid rgb(232, 232, 232);
+    padding: 8px
+}
+
+th {
+    padding-top:10px;
+    padding-bottom:10ps;
+    text-align:left;
+    background-color: rgb(249, 255, 144);
+    color: rgb(0, 0, 0)
+}
