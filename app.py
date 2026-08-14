@@ -29,14 +29,12 @@ def home():
 
 @app.route('/rules')
 def display_rules():
-    with open(g.data_dir + '/rules.yaml', 'r') as file:
+    with open(os.path.join(g.data_dir, 'rules.yaml'), 'r') as file:
         rules = yaml.safe_load(file)
 
-    opening_lines = rules['opening_lines']
-    game_actions = rules['game_actions']
     return render_template('rules.html',
-                           opening_lines=opening_lines,
-                           game_actions=game_actions)
+                           opening_lines=rules['opening_lines'],
+                           game_actions=rules['game_actions'])
 
 @app.route('/leaderboard')
 def display_leaderboard():
@@ -51,15 +49,20 @@ def enter_playername():
 @app.route('/enter_playername/validate', methods=['POST'])
 def validate_playername():
     player_name = request.form['player_name'].strip()
-    if not utils.valid_player_name(player_name, MAX_PLAYERNAME_LENGTH):
-        flash('Not a valid username. Try again.')
-        return render_template('pick_playername.html', current_name=player_name)
-        
-    with open(g.data_dir + '/leaderboard.yaml', 'r') as file:
-        leaderboard = yaml.safe_load(file)
+
+    if not utils.valid_player_name(player_name):
+        flash('Not a valid username. Use only numbers and letters. Try again.')
+        return render_template('pick_playername.html',
+                               current_name=player_name,
+                               max_playername_length=MAX_PLAYERNAME_LENGTH)
+
+    leaderboard = dict(utils.get_leaderboard(g.leaderboard_filepath))
+
     if player_name in leaderboard.keys():
         flash('Please choose another username, current one in leaderboard.')
-        return render_template('pick_playername.html', current_name=player_name)
+        return render_template('pick_playername.html',
+                               current_name=player_name,
+                               max_playername_length=MAX_PLAYERNAME_LENGTH)
 
     session['player_name'] = player_name
     return redirect(url_for('play_game'))
@@ -87,6 +90,7 @@ def computer_turn():
     player_move = request.form['move']
     computer_move = game_logic.get_computer_move()
     winning_move = game_logic.determine_winning_move(player_move, computer_move)
+    winning_method = game_logic.get_winning_method(player_move, computer_move)
 
     if winning_move:
         if player_move == winning_move:
@@ -101,20 +105,20 @@ def computer_turn():
     session['player_move'] = player_move
     session['computer_move'] = computer_move
     session['winning_move'] = winning_move
-    session['winning_method'] = game_logic.get_winning_method(player_move, 
-                                                              computer_move)
+    session['winning_method'] = winning_method
     session['result'] = result
 
     return redirect(url_for('display_outcome'))
 
 @app.route('/play/outcome')
 def display_outcome():
-    final_round = session['round'] >= 5
     player_move = session.pop('player_move')
     computer_move = session.pop('computer_move')
     winning_move = session.pop('winning_move')
     winning_method = session.pop('winning_method')
     result = session.pop('result')
+
+    final_round = session['round'] >= MAX_ROUNDS_PER_GAME
     included_on_leaderboard = False
 
     if final_round:
@@ -142,5 +146,4 @@ def display_outcome():
 if __name__ == '__main__':
     app.run(debug=True, port=5003)
 
-# TODO: Separate functionality, DRY the code?
 # TODO: Clean up UI a bit with basic CSS
