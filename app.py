@@ -21,6 +21,7 @@ MAX_ROUNDS_PER_GAME = 5
 def get_data_path():
     root = os.path.abspath(os.path.dirname(__file__))
     g.data_dir = os.path.join(root, 'rpsls_online', 'data')
+    g.leaderboard_filepath = os.path.join(g.data_dir, 'leaderboard.yaml')
 
 @app.route('/')
 def home():
@@ -39,9 +40,7 @@ def display_rules():
 
 @app.route('/leaderboard')
 def display_leaderboard():
-    with open(g.data_dir + '/leaderboard.yaml', 'r') as file:
-        leaderboard = [(name, score) for name, score in yaml.safe_load(file).items()]
-        leaderboard.sort(key=lambda tup: tup[1], reverse=True)
+    leaderboard = utils.get_leaderboard(g.leaderboard_filepath)
     return render_template('leaderboard.html', leaderboard=leaderboard)
 
 @app.route('/enter_playername')
@@ -119,9 +118,7 @@ def display_outcome():
     included_on_leaderboard = False
 
     if final_round:
-        with open(g.data_dir + '/leaderboard.yaml', 'r') as file:
-                leaderboard = [(name, score) for name, score in yaml.safe_load(file).items()]
-                leaderboard.sort(key=lambda tup: tup[1], reverse=True)
+        leaderboard = utils.get_leaderboard(g.leaderboard_filepath)
 
         if utils.include_score_in_leaderboard(session['score'], leaderboard):
             leaderboard = utils.update_leaderboard(session['player_name'], session['score'], leaderboard)
