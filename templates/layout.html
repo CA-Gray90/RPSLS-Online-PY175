@@ -3,12 +3,24 @@
   <head>
     <meta charset="UTF-8">
     <meta name="description" content="Rock, Paper, Scissors, Lizard, Spock online">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/styles.css') }}">
     {% block title %}
     {% endblock %}
   </head>
 
   <body>
+    {% with messages = get_flashed_messages(with_categories=True) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">
+            <p>{{ message }}</p>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
     {% block content %}
+    <!-- Content filled from other templates -->
     {% endblock %}
   </body>
 </html>

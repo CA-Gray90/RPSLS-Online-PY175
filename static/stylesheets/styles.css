@@ -1,0 +1,8 @@
+.flash.error {
+    color: #ff0000;
+    background: #ffbaba; }
+
+.flash.success {
+    color:rgb(0, 184, 28);
+    background: #d4ffcc
+}

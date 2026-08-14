@@ -56,7 +56,8 @@ def validate_playername():
     player_name = request.form['player_name'].strip()
 
     if not rpsls_online.utils.valid_player_name(player_name):
-        flash('Not a valid username. Use only numbers and letters. Try again.')
+        flash('Not a valid username. Use only numbers and letters. Try again.',
+              'error')
         return render_template('pick_playername.html',
                                current_name=player_name,
                                max_playername_length=MAX_PLAYERNAME_LENGTH)
@@ -64,12 +65,14 @@ def validate_playername():
     leaderboard = dict(rpsls_online.utils.get_leaderboard(g.leaderboard_filepath))
 
     if player_name in leaderboard.keys():
-        flash('Please choose another username, current one in leaderboard.')
+        flash('Please choose another username, current one in leaderboard.',
+              'error')
         return render_template('pick_playername.html',
                                current_name=player_name,
                                max_playername_length=MAX_PLAYERNAME_LENGTH)
 
     session['player_name'] = player_name
+    flash('Successful username created.', 'success')
     return redirect(url_for('play_game'))
 
 @app.route('/new_player')
