@@ -14,7 +14,7 @@ import game_logic, os, utils, yaml
 app = Flask(__name__)
 app.secret_key = '!i_love_rpsls_online!'
 
-PLAYER_NAME_LENGTH = 8
+MAX_PLAYERNAME_LENGTH = 10
 MAX_ROUNDS_PER_GAME = 5
 
 @app.before_request
@@ -46,12 +46,13 @@ def display_leaderboard():
 
 @app.route('/enter_playername')
 def enter_playername():
-    return render_template('pick_playername.html')
+    return render_template('pick_playername.html',
+                           max_playername_length=MAX_PLAYERNAME_LENGTH)
 
 @app.route('/enter_playername/validate', methods=['POST'])
 def validate_playername():
     player_name = request.form['player_name'].strip()
-    if not utils.valid_player_name(player_name, PLAYER_NAME_LENGTH):
+    if not utils.valid_player_name(player_name, MAX_PLAYERNAME_LENGTH):
         flash('Not a valid username. Try again.')
         return render_template('pick_playername.html', current_name=player_name)
         

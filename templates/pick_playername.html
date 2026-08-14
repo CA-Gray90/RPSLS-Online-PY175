@@ -17,8 +17,8 @@
 {% endwith %}
 <h2>Pick your player name!</h2>
 <form action="{{ url_for('validate_playername') }} " method="POST">
-  <label for="player_name">Enter Player name (Max 8 Characters):</label>
-  <input id="player_name" type="text" name="player_name" maxlength="8" size="6" value="{{ current_name }}">
+  <label for="player_name">Enter Player name (Max {{ max_playername_length }} Characters):</label>
+  <input id="player_name" type="text" name="player_name" maxlength="{{ max_playername_length }}" size="{{ max_playername_length - 2 }}" value="{{ current_name }}">
   <input type="submit" value="Submit">
 </form>
 {% endblock %}
