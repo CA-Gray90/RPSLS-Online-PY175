@@ -9,12 +9,12 @@ from flask import (
     url_for
     )
 
-from rpsls_online.game_logic import (
+from src.rpsls_online.game_logic import (
     get_computer_move,
     get_winning_method,
     determine_winning_move)
 
-import os, secrets, rpsls_online.utils, yaml
+import os, secrets, src.rpsls_online.utils, yaml
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(32)
@@ -43,7 +43,7 @@ def display_rules():
 
 @app.route('/leaderboard')
 def display_leaderboard():
-    leaderboard = rpsls_online.utils.get_leaderboard(g.leaderboard_filepath)
+    leaderboard = src.rpsls_online.utils.get_leaderboard(g.leaderboard_filepath)
     return render_template('leaderboard.html', leaderboard=leaderboard)
 
 @app.route('/enter_playername')
@@ -55,14 +55,14 @@ def enter_playername():
 def validate_playername():
     player_name = request.form['player_name'].strip()
 
-    if not rpsls_online.utils.valid_player_name(player_name):
+    if not src.rpsls_online.utils.valid_player_name(player_name):
         flash('Not a valid username. Use only numbers and letters. Try again.',
               'error')
         return render_template('pick_playername.html',
                                current_name=player_name,
                                max_playername_length=MAX_PLAYERNAME_LENGTH)
 
-    leaderboard = dict(rpsls_online.utils.get_leaderboard(g.leaderboard_filepath))
+    leaderboard = dict(src.rpsls_online.utils.get_leaderboard(g.leaderboard_filepath))
 
     if player_name in leaderboard.keys():
         flash('Please choose another username, current one in leaderboard.',
@@ -130,10 +130,10 @@ def display_outcome():
     included_on_leaderboard = False
 
     if final_round:
-        leaderboard = rpsls_online.utils.get_leaderboard(g.leaderboard_filepath)
+        leaderboard = src.rpsls_online.utils.get_leaderboard(g.leaderboard_filepath)
 
-        if rpsls_online.utils.include_score_in_leaderboard(session['score'], leaderboard):
-            leaderboard = rpsls_online.utils.update_leaderboard(session['player_name'], session['score'], leaderboard)
+        if src.rpsls_online.utils.include_score_in_leaderboard(session['score'], leaderboard):
+            leaderboard = src.rpsls_online.utils.update_leaderboard(session['player_name'], session['score'], leaderboard)
 
             with open(g.data_dir + '/leaderboard.yaml', 'w') as file:
                 yaml.safe_dump(dict(leaderboard), file)
