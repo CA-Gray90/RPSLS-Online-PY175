@@ -9,10 +9,10 @@ from flask import (
     url_for
     )
 
-import game_logic, os, utils, yaml
+import game_logic, os, secrets, utils, yaml
 
 app = Flask(__name__)
-app.secret_key = '!i_love_rpsls_online!'
+app.secret_key = secrets.token_hex(32)
 
 MAX_PLAYERNAME_LENGTH = 10
 MAX_ROUNDS_PER_GAME = 5
