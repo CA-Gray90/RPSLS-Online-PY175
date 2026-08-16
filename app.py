@@ -26,7 +26,7 @@ MAX_ROUNDS_PER_GAME = 5
 def get_data_path():
     root = os.path.abspath(os.path.dirname(__file__))
     g.data_dir = os.path.join(root, 'rpsls_online', 'data')
-    g.leaderboard_filepath = os.path.join(g.data_dir, 'leaderboard.yaml')
+    g.leaderboard_storage = os.path.join(g.data_dir, 'leaderboard.yaml')
 
 @app.route('/')
 def home():
@@ -43,7 +43,7 @@ def display_rules():
 
 @app.route('/leaderboard')
 def display_leaderboard():
-    leaderboard = src.rpsls_online.utils.get_leaderboard(g.leaderboard_filepath)
+    leaderboard = src.rpsls_online.utils.get_leaderboard(g.leaderboard_storage)
     return render_template('leaderboard.html', leaderboard=leaderboard)
 
 @app.route('/enter_playername')
@@ -62,7 +62,7 @@ def validate_playername():
                                current_name=player_name,
                                max_playername_length=MAX_PLAYERNAME_LENGTH)
 
-    leaderboard = dict(src.rpsls_online.utils.get_leaderboard(g.leaderboard_filepath))
+    leaderboard = dict(src.rpsls_online.utils.get_leaderboard(g.leaderboard_storage))
 
     if player_name in leaderboard.keys():
         flash('Please choose another username, current one in leaderboard.',
@@ -130,7 +130,7 @@ def display_outcome():
     included_on_leaderboard = False
 
     if final_round:
-        leaderboard = src.rpsls_online.utils.get_leaderboard(g.leaderboard_filepath)
+        leaderboard = src.rpsls_online.utils.get_leaderboard(g.leaderboard_storage)
 
         if src.rpsls_online.utils.include_score_in_leaderboard(session['score'], leaderboard):
             leaderboard = src.rpsls_online.utils.update_leaderboard(session['player_name'], session['score'], leaderboard)
