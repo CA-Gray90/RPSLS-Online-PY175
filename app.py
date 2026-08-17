@@ -137,11 +137,11 @@ def computer_turn():
 @app.route('/play/outcome')
 @requires_playername
 def display_outcome():
-    player_move = session.pop('player_move')
-    computer_move = session.pop('computer_move')
-    winning_move = session.pop('winning_move')
-    winning_method = session.pop('winning_method')
-    result = session.pop('result')
+    player_move = session.get('player_move')
+    computer_move = session.get('computer_move')
+    winning_move = session.get('winning_move')
+    winning_method = session.get('winning_method')
+    result = session.get('result')
 
     final_round = session['round'] >= MAX_ROUNDS_PER_GAME
     included_on_leaderboard = False
@@ -171,4 +171,4 @@ if __name__ == '__main__':
     else:
         app.run(debug=True, port=5003)
 
-# TODO: Refresh page leads to errors, going from rules to play leads to an error? investigate.
+# TODO: Refresh page leads to errors
