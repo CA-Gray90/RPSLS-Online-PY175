@@ -96,14 +96,13 @@ def new_player():
 @app.route('/play')
 @requires_playername
 def play_game():
-    session['round'] = 0
+    session['round'] = 1
     session['score'] = 0
     return render_template('play_game.html', player_name=session['player_name'])
 
 @app.route('/play/player_turn')
 @requires_playername
 def player_turn():
-    session['round'] += 1
     return render_template('player_turn.html',
                            round_number=session['round'],
                            max_rounds=MAX_ROUNDS_PER_GAME)
@@ -153,6 +152,8 @@ def display_outcome():
             g.leaderboard_storage.update_leaderboard(session['player_name'], session['score'])
             included_on_leaderboard = True
 
+    session['round'] += 1
+
     return render_template(
         'outcome.html',
         player_move=player_move,
@@ -170,5 +171,3 @@ if __name__ == '__main__':
         app.run(debug=False)
     else:
         app.run(debug=True, port=5003)
-
-# TODO: Refresh page leads to errors
