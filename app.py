@@ -1,3 +1,5 @@
+from src.rpsls_online.database_persistence import DatabasePersistence
+
 from flask import (
     Flask,
     flash,
@@ -26,7 +28,8 @@ MAX_ROUNDS_PER_GAME = 5
 def get_data_path():
     root = os.path.abspath(os.path.dirname(__file__))
     g.data_dir = os.path.join(root, 'rpsls_online', 'data')
-    g.leaderboard_storage = os.path.join(g.data_dir, 'leaderboard.yaml')
+    # g.leaderboard_storage = os.path.join(g.data_dir, 'leaderboard.yaml')
+    g.leaderboard_storage = DatabasePersistence()
 
 @app.route('/')
 def home():
@@ -43,7 +46,7 @@ def display_rules():
 
 @app.route('/leaderboard')
 def display_leaderboard():
-    leaderboard = src.rpsls_online.utils.get_leaderboard(g.leaderboard_storage)
+    leaderboard = g.leaderboard_storage.get_leaderboard()
     return render_template('leaderboard.html', leaderboard=leaderboard)
 
 @app.route('/enter_playername')
@@ -62,9 +65,9 @@ def validate_playername():
                                current_name=player_name,
                                max_playername_length=MAX_PLAYERNAME_LENGTH)
 
-    leaderboard = dict(src.rpsls_online.utils.get_leaderboard(g.leaderboard_storage))
+    leaderboard = g.leaderboard_storage.get_leaderboard()
 
-    if player_name in leaderboard.keys():
+    if player_name in dict(leaderboard).keys():
         flash('Please choose another username, current one in leaderboard.',
               'error')
         return render_template('pick_playername.html',
@@ -130,13 +133,10 @@ def display_outcome():
     included_on_leaderboard = False
 
     if final_round:
-        leaderboard = src.rpsls_online.utils.get_leaderboard(g.leaderboard_storage)
+        leaderboard = g.leaderboard_storage.get_leaderboard()
 
         if src.rpsls_online.utils.include_score_in_leaderboard(session['score'], leaderboard):
-            leaderboard = src.rpsls_online.utils.update_leaderboard(session['player_name'], session['score'], leaderboard)
-
-            with open(g.data_dir + '/leaderboard.yaml', 'w') as file:
-                yaml.safe_dump(dict(leaderboard), file)
+            g.leaderboard_storage.update_leaderboard(session['player_name'], session['score'])
             included_on_leaderboard = True
 
     return render_template(
@@ -156,3 +156,5 @@ if __name__ == '__main__':
         app.run(debug=False)
     else:
         app.run(debug=True, port=5003)
+
+# TODO: Refresh page leads to errors, going from rules to play leads to an error? investigate.
