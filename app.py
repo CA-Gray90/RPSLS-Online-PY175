@@ -17,6 +17,7 @@ from src.rpsls_online.game_logic import (
     determine_winning_move)
 
 import os, secrets, src.rpsls_online.utils, yaml
+from functools import wraps
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(32)
@@ -24,11 +25,20 @@ app.secret_key = secrets.token_hex(32)
 MAX_PLAYERNAME_LENGTH = 10
 MAX_ROUNDS_PER_GAME = 5
 
+def requires_playername(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if not session.get('player_name', None):
+            return redirect(url_for('enter_playername'))
+        else:
+            return func(*args, **kwargs)
+
+    return wrapper
+
 @app.before_request
 def get_data_path():
     root = os.path.abspath(os.path.dirname(__file__))
     g.data_dir = os.path.join(root, 'rpsls_online', 'data')
-    # g.leaderboard_storage = os.path.join(g.data_dir, 'leaderboard.yaml')
     g.leaderboard_storage = DatabasePersistence()
 
 @app.route('/')
@@ -84,12 +94,14 @@ def new_player():
     return redirect(url_for('enter_playername'))
 
 @app.route('/play')
+@requires_playername
 def play_game():
     session['round'] = 0
     session['score'] = 0
     return render_template('play_game.html', player_name=session['player_name'])
 
 @app.route('/play/player_turn')
+@requires_playername
 def player_turn():
     session['round'] += 1
     return render_template('player_turn.html',
@@ -97,6 +109,7 @@ def player_turn():
                            max_rounds=MAX_ROUNDS_PER_GAME)
 
 @app.route('/play/computer_turn', methods=['POST'])
+@requires_playername
 def computer_turn():
     player_move = request.form['move']
     computer_move = get_computer_move()
@@ -122,6 +135,7 @@ def computer_turn():
     return redirect(url_for('display_outcome'))
 
 @app.route('/play/outcome')
+@requires_playername
 def display_outcome():
     player_move = session.pop('player_move')
     computer_move = session.pop('computer_move')
